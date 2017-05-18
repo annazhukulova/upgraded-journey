@@ -269,7 +269,7 @@ function cellClick() {
 		if (this.style.backgroundImage != '') {
 			previous = this;
 			//previous.style.boxShadow = 'inset 0 0 20px #301901';
-			secondClick();		
+			secondClick.call(this);
 		}
 	}
 }
