@@ -1,0 +1,78 @@
+body {
+	background: url(images/chess.jpg) repeat;
+}
+
+#chess-field {
+    display: inline-block;
+}
+
+#eaten-white {
+	min-height: 50px;
+	width: 366px;
+	margin: 5px auto;
+	background-color: #F6CE96;
+}
+
+#eaten-black {
+	min-height: 50px;
+	width: 366px;
+	margin: 5px auto;
+	background-color: #723a00;
+}
+
+#play-now {
+	padding: 10px;
+	min-height: 20px;
+	width: 346px;
+	margin: 5px auto;
+	text-align: center;
+	background-color: #C5833E;
+	color: white;
+}
+
+#renew, #start{
+    width: 156px;
+    padding: 10px;
+    color: white;
+    background-color: #C5833E;
+    text-align: center;
+    cursor: pointer;
+	display: inline-block;
+	margin: 5px auto;
+}
+
+#start{
+	margin-right: 10px;
+}
+
+.game-table {
+    border-collapse: collapse;
+	border: 15px solid #C5833E;
+}
+
+td {
+    width: 40px;
+    height: 40px;
+    border: none;
+}
+
+td.cell-white {
+	 background-color: #F6CE96;
+}
+
+td.cell-white:hover {
+	 background-color: #d8b37d;
+}
+
+td.cell-black {
+	 background-color: #723a00;
+}
+
+td.cell-black:hover {
+	 background-color: #5B3004;
+}
+
+.wrap {
+    margin: 30px auto 0;
+    text-align: center;
+}
