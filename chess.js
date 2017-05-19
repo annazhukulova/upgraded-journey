@@ -61,15 +61,13 @@ function prepareGameField() {
 				cell.addEventListener('click', cellClick); // Подключаем событие нажатия
 				cell.addEventListener('click', secondClick); // Подключаем событие второго нажатия
 			}
-			
-            
         }
         game_table.appendChild(row); // Добавление строки
     }
 
     document.getElementById('chess-field').appendChild(game_table); // Добавление таблицы
 	
-	document.getElementById('play-now').innerHTML = 'Ход белых'; // Добавление начального текста в поле
+	document.getElementById('play-now').innerHTML = 'Для начала игры нажмите "Старт"'; // Добавление начального текста в поле
 }
 
 /**
@@ -80,170 +78,139 @@ function putFigures() {
 		for (var j = 0; j < FIELD_SIZE_X; j++) {
 			var className = 'cell-' + j + '-' + i;
 			var cell = document.getElementsByClassName(className)[0];
+            cell.style.backgroundSize = 'contain';
 
 			// По координатам ячеек в таблице расставляются фигуры
 			switch (className) {
 				// Черные
 				case 'cell-0-0': {
 					cell.style.backgroundImage = 'url(images/rook_black.png)';
-					cell.style.backgroundSize = 'contain';
 					break;
 				}
 				case 'cell-0-1': {
 					cell.style.backgroundImage = 'url(images/horse_black.png)';
-					cell.style.backgroundSize = 'contain';
 					break;
 				}
 				case 'cell-0-2': {
 					cell.style.backgroundImage = 'url(images/elefant_black.png)';
-					cell.style.backgroundSize = 'contain';
 					break;
 				}
 				case 'cell-0-3': {
 					cell.style.backgroundImage = 'url(images/qween_black.png)';
-					cell.style.backgroundSize = 'contain';
 					break;
 				}
 				case 'cell-0-4': {
 					cell.style.backgroundImage = 'url(images/king_black.png)';
-					cell.style.backgroundSize = 'contain';
 					break;
 				}
 				case 'cell-0-5': {
 					cell.style.backgroundImage = 'url(images/elefant_black.png)';
-					cell.style.backgroundSize = 'contain';
 					break;
 				}
 				case 'cell-0-6': {
 					cell.style.backgroundImage = 'url(images/horse_black.png)';
-					cell.style.backgroundSize = 'contain';
 					break;
 				}
 				case 'cell-0-7': {
 					cell.style.backgroundImage = 'url(images/rook_black.png)';
-					cell.style.backgroundSize = 'contain';
 					break;
 				}
 				case 'cell-1-0': {
 					cell.style.backgroundImage = 'url(images/pawn_black.png)';
-					cell.style.backgroundSize = 'contain';
 					break;
 				}
 				case 'cell-1-1': {
 					cell.style.backgroundImage = 'url(images/pawn_black.png)';
-					cell.style.backgroundSize = 'contain';
 					break;
 				}
 				case 'cell-1-2': {
 					cell.style.backgroundImage = 'url(images/pawn_black.png)';
-					cell.style.backgroundSize = 'contain';
 					break;
 				}
 				case 'cell-1-3': {
 					cell.style.backgroundImage = 'url(images/pawn_black.png)';
-					cell.style.backgroundSize = 'contain';
 					break;
 				}
 				case 'cell-1-4': {
 					cell.style.backgroundImage = 'url(images/pawn_black.png)';
-					cell.style.backgroundSize = 'contain';
 					break;
 				}
 				case 'cell-1-5': {
 					cell.style.backgroundImage = 'url(images/pawn_black.png)';
-					cell.style.backgroundSize = 'contain';
 					break;
 				}
 				case 'cell-1-6': {
 					cell.style.backgroundImage = 'url(images/pawn_black.png)';
-					cell.style.backgroundSize = 'contain';
 					break;
 				}
 				case 'cell-1-7': {
 					cell.style.backgroundImage = 'url(images/pawn_black.png)';
-					cell.style.backgroundSize = 'contain';
 					break;
 				}
 				
 				// Белые
 				case 'cell-7-0': {
 					cell.style.backgroundImage = 'url(images/rook_white.png)';
-					cell.style.backgroundSize = 'contain';
 					break;
 				}
 				case 'cell-7-1': {
 					cell.style.backgroundImage = 'url(images/horse_white.png)';
-					cell.style.backgroundSize = 'contain';
 					break;
 				}
 				case 'cell-7-2': {
 					cell.style.backgroundImage = 'url(images/elefant_white.png)';
-					cell.style.backgroundSize = 'contain';
 					break;
 				}
 				case 'cell-7-3': {
 					cell.style.backgroundImage = 'url(images/qween_white.png)';
-					cell.style.backgroundSize = 'contain';
 					break;
 				}
 				case 'cell-7-4': {
 					cell.style.backgroundImage = 'url(images/king_white.png)';
-					cell.style.backgroundSize = 'contain';
 					break;
 				}
 				case 'cell-7-5': {
 					cell.style.backgroundImage = 'url(images/elefant_white.png)';
-					cell.style.backgroundSize = 'contain';
 					break;
 				}
 				case 'cell-7-6': {
 					cell.style.backgroundImage = 'url(images/horse_white.png)';
-					cell.style.backgroundSize = 'contain';
 					break;
 				}
 				case 'cell-7-7': {
 					cell.style.backgroundImage = 'url(images/rook_white.png)';
-					cell.style.backgroundSize = 'contain';
 					break;
 				}
 				case 'cell-6-0': {
 					cell.style.backgroundImage = 'url(images/pawn_white.png)';
-					cell.style.backgroundSize = 'contain';
 					break;
 				}
 				case 'cell-6-1': {
 					cell.style.backgroundImage = 'url(images/pawn_white.png)';
-					cell.style.backgroundSize = 'contain';
 					break;
 				}
 				case 'cell-6-2': {
 					cell.style.backgroundImage = 'url(images/pawn_white.png)';
-					cell.style.backgroundSize = 'contain';
 					break;
 				}
 				case 'cell-6-3': {
 					cell.style.backgroundImage = 'url(images/pawn_white.png)';
-					cell.style.backgroundSize = 'contain';
 					break;
 				}
 				case 'cell-6-4': {
 					cell.style.backgroundImage = 'url(images/pawn_white.png)';
-					cell.style.backgroundSize = 'contain';
 					break;
 				}
 				case 'cell-6-5': {
 					cell.style.backgroundImage = 'url(images/pawn_white.png)';
-					cell.style.backgroundSize = 'contain';
 					break;
 				}
 				case 'cell-6-6': {
 					cell.style.backgroundImage = 'url(images/pawn_white.png)';
-					cell.style.backgroundSize = 'contain';
 					break;
 				}
 				case 'cell-6-7': {
 					cell.style.backgroundImage = 'url(images/pawn_white.png)';
-					cell.style.backgroundSize = 'contain';
 					break;
 				}				
 			}			
@@ -257,6 +224,7 @@ function putFigures() {
 function startGame() {
 	document.getElementById('start').style.boxShadow = 'inset 0 0 20px #301901'; // При нажатии кнопка "вдавливается"
 	document.getElementById('start').disabled = true;		                     // И далее неактивна
+    document.getElementById('play-now').innerHTML = 'Ход белых';
     game_is_running = true;
 	white_play = true;
 }
@@ -293,14 +261,14 @@ function secondClick() {
 						var j = previous.className.slice(-1); // Взять последний символ строки
 						if (this.className == 'cell-white cell-4-' + j || this.className == 'cell-white cell-5-' + j ||
 							this.className == 'cell-black cell-4-' + j || this.className == 'cell-black cell-5-' + j) {
-							next = this;
-							next.style.backgroundImage = previous.style.backgroundImage;
-							next.style.backgroundSize = 'contain';
-							previous.style.boxShadow = '';
-							previous.style.backgroundImage = '';
-							white_play = false;
-							black_play = true;
-							document.getElementById('play-now').innerHTML = 'Ход черных';
+                            next = this;
+                            next.style.backgroundImage = previous.style.backgroundImage;
+                            next.style.backgroundSize = 'contain';
+                            previous.style.boxShadow = '';
+                            previous.style.backgroundImage = '';
+                            white_play = false;
+                            black_play = true;
+                            document.getElementById('play-now').innerHTML = 'Ход черных';
 						}
 					// если пешка стоит не на начальной позиции, можем ходить на одну клетку вперёд
 					} else if (previous.className != 'cell-white cell-6-0' && previous.className != 'cell-black cell-6-1' &&
