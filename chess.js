@@ -1,8 +1,10 @@
-// Глобальные переменные:
+/**
+ * Глобальные переменные
+ */
 var FIELD_SIZE_X = 8;
 var FIELD_SIZE_Y = 8;
-var previous; // переменная для фигуры, которой ходим
-var next;     // переменная для фигуры/клетки, куда ходим
+var previous;                // переменная для фигуры, которой ходим
+var next;                    // переменная для фигуры/клетки, куда ходим
 var game_is_running = false; // идёт ли игра
 var white_play = false;      // ожидание хода белых
 var black_play = false;      // ожидание хода чёрных
@@ -13,6 +15,10 @@ var black_play = false;      // ожидание хода чёрных
 function init() {
     prepareGameField(); // Генерация поля
 	putFigures();       // Расстановка фигур
+	figureMove('rookBlack'); // Подключаем движение фигур
+	figureMove('horseBlack');
+	figureMove('elefantBlack');
+	figureMove('qweenBlack');
 	
 	// События кнопок Старт и Новая игра
     document.getElementById('start').addEventListener('click', startGame);
@@ -46,20 +52,16 @@ function prepareGameField() {
 			if ((i+j)%2==0) { // В зависимости от положения ячейки чередуем цвета
 				// Создание белой ячейки
 				var cell = document.createElement('td');
-				cell.className = 'cell-white cell-' + i + '-' + j;
+				cell.className = 'cell-white cell-' + i + '-' + j + ' droppable';
 
 				row.appendChild(cell); // Добавление ячейки
-				cell.addEventListener('click', cellClick); // Подключаем событие нажатия
-				cell.addEventListener('click', secondClick); // Подключаем событие второго нажатия
 			
 			} else {
 				// Создание чёрной ячейки
 				var cell = document.createElement('td');
-				cell.className = 'cell-black cell-' + i + '-' + j;
+				cell.className = 'cell-black cell-' + i + '-' + j + ' droppable';
 
 				row.appendChild(cell); // Добавление ячейки	
-				cell.addEventListener('click', cellClick); // Подключаем событие нажатия
-				cell.addEventListener('click', secondClick); // Подключаем событие второго нажатия
 			}
         }
         game_table.appendChild(row); // Добавление строки
@@ -84,19 +86,39 @@ function putFigures() {
 			switch (className) {
 				// Черные
 				case 'cell-0-0': {
-					cell.style.backgroundImage = 'url(images/rook_black.png)';
+					var img = document.createElement('img'); // Создаем картинку
+					img.src = 'images/rook_black.png';       // Указываем путь
+					img.style.height = '40px';               // Высота
+					img.classList.add('rookBlack');          // Класс - имя фигуры
+					img.classList.add('draggable');          // Класс - переносимое
+					cell.appendChild(img);                   // Добавляем картинку в клетку
 					break;
 				}
 				case 'cell-0-1': {
-					cell.style.backgroundImage = 'url(images/horse_black.png)';
+					var img = document.createElement('img');
+					img.src = 'images/horse_black.png';
+					img.style.height = '40px';
+					img.classList.add('horseBlack');
+					img.classList.add('draggable');
+					cell.appendChild(img);
 					break;
 				}
 				case 'cell-0-2': {
-					cell.style.backgroundImage = 'url(images/elefant_black.png)';
+					var img = document.createElement('img');
+					img.src = 'images/elefant_black.png';
+					img.style.height = '40px';
+					img.classList.add('elefantBlack');
+					img.classList.add('draggable');
+					cell.appendChild(img);
 					break;
 				}
 				case 'cell-0-3': {
-					cell.style.backgroundImage = 'url(images/qween_black.png)';
+					var img = document.createElement('img');
+					img.src = 'images/qween_black.png';
+					img.style.height = '40px';
+					img.classList.add('qweenBlack');
+					img.classList.add('draggable');
+					cell.appendChild(img);
 					break;
 				}
 				case 'cell-0-4': {
@@ -229,310 +251,39 @@ function startGame() {
 	white_play = true;
 }
 
-/**
- * Первый клик
- */
-function cellClick() {	
-	if (game_is_running == true) {
-		if (this.style.backgroundImage != '') {
-			previous = this;
-			//previous.style.boxShadow = 'inset 0 0 20px #301901';
-			secondClick.call(this);
-		}
-	}
-}
 
 /**
- * Второй клик
+ * Функция перемещения мышкой
  */
-function secondClick() {
-	// Если ход белых, выбираем белую фигуру для хода
-	if (white_play == true) {
-		switch (previous.style.backgroundImage) {
-
-			// Белая пешка
-			case 'url("images/pawn_white.png")': {
-				if (this.style.backgroundImage == '') { // Если клетка пустая
-					// и пешка стоит на начальной позиции, можем ходить или на одну, или на две клетки вперёд
-					if (previous.className == 'cell-white cell-6-0' || previous.className == 'cell-black cell-6-1' ||
-						previous.className == 'cell-white cell-6-2' || previous.className == 'cell-black cell-6-3' ||
-						previous.className == 'cell-white cell-6-4' || previous.className == 'cell-black cell-6-5' ||
-						previous.className == 'cell-white cell-6-6' || previous.className == 'cell-black cell-6-7') {
-						var j = previous.className.slice(-1); // Взять последний символ строки
-						if (this.className == 'cell-white cell-4-' + j || this.className == 'cell-white cell-5-' + j ||
-							this.className == 'cell-black cell-4-' + j || this.className == 'cell-black cell-5-' + j) {
-                            next = this;
-                            next.style.backgroundImage = previous.style.backgroundImage;
-                            next.style.backgroundSize = 'contain';
-                            previous.style.boxShadow = '';
-                            previous.style.backgroundImage = '';
-                            white_play = false;
-                            black_play = true;
-                            document.getElementById('play-now').innerHTML = 'Ход черных';
-						}
-					// если пешка стоит не на начальной позиции, можем ходить на одну клетку вперёд
-					} else if (previous.className != 'cell-white cell-6-0' && previous.className != 'cell-black cell-6-1' &&
-							   previous.className != 'cell-white cell-6-2' && previous.className != 'cell-black cell-6-3' &&
-							   previous.className != 'cell-white cell-6-4' && previous.className != 'cell-black cell-6-5' &&
-							   previous.className != 'cell-white cell-6-6' && previous.className != 'cell-black cell-6-7') {
-						var j = previous.className.slice(-1); // Взять последний символ строки
-						var i = previous.className.slice(-3); // Взять три последних символа строки
-						i = i.charAt(0); // Взять первый символ строки
-						i = +i; // Приввести к числу
-						var istr = String(i-1); // Отнять 1 и привести к строке
-						if (this.className == 'cell-white cell-' + istr + '-' + j ||
-							this.className == 'cell-black cell-' + istr + '-' + j) {
-							next = this;
-							next.style.backgroundImage = previous.style.backgroundImage;
-							next.style.backgroundSize = 'contain';
-							previous.style.boxShadow = '';
-							previous.style.backgroundImage = '';
-							white_play = false;
-							black_play = true;
-							document.getElementById('play-now').innerHTML = 'Ход черных';
-						}
-					}
-					// если следующая клетка - чёрная фигура, можем есть по диагонали
-				} else if (this.style.backgroundImage == 'url("images/pawn_black.png")' ||
-						this.style.backgroundImage == 'url("images/rook_black.png")' ||
-						this.style.backgroundImage == 'url("images/horse_black.png")' ||
-						this.style.backgroundImage == 'url("images/elefant_black.png")' ||
-						this.style.backgroundImage == 'url("images/qween_black.png")' ||
-						this.style.backgroundImage == 'url("images/king_black.png")') {
-					var j = previous.className.slice(-1); // Взять последний символ строки
-					j = +j;
-					var jless = String(j-1);
-					var jmore = String(j+1);
-					console.log(j);
-					var i = previous.className.slice(-3); // Взять три последних символа строки
-					i = i.charAt(0); // Взять первый символ строки
-					i = +i;
-					var istr = String(i-1);
-					console.log('cell-white cell-' + istr + '-' + jless);
-					if (this.className == 'cell-white cell-' + istr + '-' + jless ||
-						this.className == 'cell-black cell-' + istr + '-' + jless ||
-						this.className == 'cell-white cell-' + istr + '-' + jmore ||
-						this.className == 'cell-black cell-' + istr + '-' + jmore) {
-						next = this;
-						next.style.backgroundImage = previous.style.backgroundImage;
-						next.style.backgroundSize = 'contain';
-						previous.style.boxShadow = '';
-						previous.style.backgroundImage = '';
-						white_play = false;
-						black_play = true;
-						document.getElementById('play-now').innerHTML = 'Ход черных';
-					}
-				} else {
-					//previous.style.boxShadow = '';
-					previous = this;
-				}
-				break;
-			}
-
-			// Белая ладья
-			case 'url("images/rook_white.png")': {
-				if (this.style.backgroundImage == '') {
-					next = this;
-					next.style.backgroundImage = previous.style.backgroundImage;
-					next.style.backgroundSize = 'contain';
-					previous.style.boxShadow = '';
-					previous.style.backgroundImage = '';
-					white_play = false;
-					black_play = true;
-					document.getElementById('play-now').innerHTML = 'Ход черных';
-				} else if (this.style.backgroundImage != '') {
-					//previous.style.boxShadow = '';
-					previous = this;
-				}
-				break;
-			}
-
-			// Белый конь
-			case 'url("images/horse_white.png")': {
-				if (this.style.backgroundImage == '') {
-					next = this;
-					next.style.backgroundImage = previous.style.backgroundImage;
-					next.style.backgroundSize = 'contain';
-					previous.style.boxShadow = '';
-					previous.style.backgroundImage = '';
-					white_play = false;
-					black_play = true;
-					document.getElementById('play-now').innerHTML = 'Ход черных';
-				} else if (this.style.backgroundImage != '') {
-					//previous.style.boxShadow = '';
-					previous = this;
-				}
-				break;
-			}
-
-			// Белый слон
-			case 'url("images/elefant_white.png")': {
-				if (this.style.backgroundImage == '') {
-					next = this;
-					next.style.backgroundImage = previous.style.backgroundImage;
-					next.style.backgroundSize = 'contain';
-					previous.style.boxShadow = '';
-					previous.style.backgroundImage = '';
-					white_play = false;
-					black_play = true;
-					document.getElementById('play-now').innerHTML = 'Ход черных';
-				} else if (this.style.backgroundImage != '') {
-					//previous.style.boxShadow = '';
-					previous = this;
-				}
-				break;
-			}
-
-			// Белый ферзь
-			case 'url("images/qween_white.png")': {
-				if (this.style.backgroundImage == '') {
-					next = this;
-					next.style.backgroundImage = previous.style.backgroundImage;
-					next.style.backgroundSize = 'contain';
-					previous.style.boxShadow = '';
-					previous.style.backgroundImage = '';
-					white_play = false;
-					black_play = true;
-					document.getElementById('play-now').innerHTML = 'Ход черных';
-				} else if (this.style.backgroundImage != '') {
-					//previous.style.boxShadow = '';
-					previous = this;
-				}
-				break;
-			}
-
-			// Белый король
-			case 'url("images/king_white.png")': {
-				if (this.style.backgroundImage == '') {
-					next = this;
-					next.style.backgroundImage = previous.style.backgroundImage;
-					next.style.backgroundSize = 'contain';
-					previous.style.boxShadow = '';
-					previous.style.backgroundImage = '';
-					white_play = false;
-					black_play = true;
-					document.getElementById('play-now').innerHTML = 'Ход черных';
-				} else if (this.style.backgroundImage != '') {
-					//previous.style.boxShadow = '';
-					previous = this;
-				}
-				break;
-			}
+function figureMove(className) {
+	var fig = document.getElementsByClassName(className)[0]; // Берем элемент по классу
+	// Подключаем перетаскивание
+	fig.onmousedown = function(e) {
+		fig.style.position = 'absolute'; // абсолютное позиционирование
+		moveAt(e);
+		
+		fig.style.zIndex = 3; // с нажатием - расположение над всеми
+		
+		function moveAt(e) {
+			// Устанавливаем координаты картинки под мышью
+			fig.style.left = e.pageX - fig.offsetWidth / 2 + 'px';
+			fig.style.top = e.pageY - fig.offsetHeight / 2 + 'px';
 		}
-	}
-	// Если ход чёрных
-	if (black_play == true) {
-		switch (previous.style.backgroundImage) {
-
-			// Чёрная пешка
-			case 'url("images/pawn_black.png")': {
-				if (this.style.backgroundImage == '') {
-					next = this;
-					next.style.backgroundImage = previous.style.backgroundImage;
-					next.style.backgroundSize = 'contain';
-					previous.style.boxShadow = '';
-					previous.style.backgroundImage = '';
-					black_play = false;
-					white_play = true;
-					document.getElementById('play-now').innerHTML = 'Ход белых';
-				} else if (this.style.backgroundImage != '') {
-					//previous.style.boxShadow = '';
-					previous = this;
-				}
-				break;
-			}
-
-			// Черная ладья
-			case 'url("images/rook_black.png")': {
-				if (this.style.backgroundImage == '') {
-					next = this;
-					next.style.backgroundImage = previous.style.backgroundImage;
-					next.style.backgroundSize = 'contain';
-					previous.style.boxShadow = '';
-					previous.style.backgroundImage = '';
-					black_play = false;
-					white_play = true;
-					document.getElementById('play-now').innerHTML = 'Ход белых';
-				} else if (this.style.backgroundImage != '') {
-					//previous.style.boxShadow = '';
-					previous = this;
-				}
-				break;
-			}
-
-			// Черный конь
-			case 'url("images/horse_black.png")': {
-				if (this.style.backgroundImage == '') {
-					next = this;
-					next.style.backgroundImage = previous.style.backgroundImage;
-					next.style.backgroundSize = 'contain';
-					previous.style.boxShadow = '';
-					previous.style.backgroundImage = '';
-					black_play = false;
-					white_play = true;
-					document.getElementById('play-now').innerHTML = 'Ход белых';
-				} else if (this.style.backgroundImage != '') {
-					//previous.style.boxShadow = '';
-					previous = this;
-				}
-				break;
-			}
-
-			// Черный слон
-			case 'url("images/elefant_black.png")': {
-				if (this.style.backgroundImage == '') {
-					next = this;
-					next.style.backgroundImage = previous.style.backgroundImage;
-					next.style.backgroundSize = 'contain';
-					previous.style.boxShadow = '';
-					previous.style.backgroundImage = '';
-					black_play = false;
-					white_play = true;
-					document.getElementById('play-now').innerHTML = 'Ход белых';
-				} else if (this.style.backgroundImage != '') {
-					//previous.style.boxShadow = '';
-					previous = this;
-				}
-				break;
-			}
-
-			// Чёрный ферзь
-			case 'url("images/qween_black.png")': {
-				if (this.style.backgroundImage == '') {
-					next = this;
-					next.style.backgroundImage = previous.style.backgroundImage;
-					next.style.backgroundSize = 'contain';
-					previous.style.boxShadow = '';
-					previous.style.backgroundImage = '';
-					black_play = false;
-					white_play = true;
-					document.getElementById('play-now').innerHTML = 'Ход белых';
-				} else if (this.style.backgroundImage != '') {
-					//previous.style.boxShadow = '';
-					previous = this;
-				}
-				break;
-			}
-
-			// Черный король
-			case 'url("images/king_black.png")': {
-				if (this.style.backgroundImage == '') {
-					next = this;
-					next.style.backgroundImage = previous.style.backgroundImage;
-					next.style.backgroundSize = 'contain';
-					previous.style.boxShadow = '';
-					previous.style.backgroundImage = '';
-					black_play = false;
-					white_play = true;
-					document.getElementById('play-now').innerHTML = 'Ход белых';
-				} else if (this.style.backgroundImage != '') {
-					//previous.style.boxShadow = '';
-					previous = this;
-				}
-				break;
-			}
+		
+		document.onmousemove = function(e) {
+			moveAt(e);			
 		}
+		
+		fig.onmouseup = function() {
+			document.onmousemove = null;
+			fig.onmouseup = null;
+			fig.style.zIndex = 2; // по окончании движения расположение под теми, что будут двигаться
+		}				
 	}
+	// Отключаем прилипание
+	fig.ondragstart = function() {
+		return false;
+	};
 }
 	
 /**
