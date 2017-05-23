@@ -8,6 +8,7 @@ var next;                    // переменная для фигуры/кле�
 var game_is_running = false; // идёт ли игра
 var white_play = false;      // ожидание хода белых
 var black_play = false;      // ожидание хода чёрных
+var coordsArray = [];        // двумерный массив для координат ячеек
 
 /**
  * Функция инициализации
@@ -52,14 +53,14 @@ function prepareGameField() {
 			if ((i+j)%2==0) { // В зависимости от положения ячейки чередуем цвета
 				// Создание белой ячейки
 				var cell = document.createElement('td');
-				cell.className = 'cell-white cell-' + i + '-' + j + ' droppable';
+				cell.className = 'cell-white cell-' + i + '-' + j;
 
 				row.appendChild(cell); // Добавление ячейки
 			
 			} else {
 				// Создание чёрной ячейки
 				var cell = document.createElement('td');
-				cell.className = 'cell-black cell-' + i + '-' + j + ' droppable';
+				cell.className = 'cell-black cell-' + i + '-' + j;
 
 				row.appendChild(cell); // Добавление ячейки	
 			}
@@ -88,36 +89,36 @@ function putFigures() {
 				case 'cell-0-0': {
 					var img = document.createElement('img'); // Создаем картинку
 					img.src = 'images/rook_black.png';       // Указываем путь
-					img.style.height = '40px';               // Высота
+					img.style.height = '38px';               // Высота
 					img.classList.add('rookBlack');          // Класс - имя фигуры
-					img.classList.add('draggable');          // Класс - переносимое
+					
 					cell.appendChild(img);                   // Добавляем картинку в клетку
 					break;
 				}
 				case 'cell-0-1': {
 					var img = document.createElement('img');
 					img.src = 'images/horse_black.png';
-					img.style.height = '40px';
+					img.style.height = '38px';
 					img.classList.add('horseBlack');
-					img.classList.add('draggable');
+					
 					cell.appendChild(img);
 					break;
 				}
 				case 'cell-0-2': {
 					var img = document.createElement('img');
 					img.src = 'images/elefant_black.png';
-					img.style.height = '40px';
+					img.style.height = '38px';
 					img.classList.add('elefantBlack');
-					img.classList.add('draggable');
+					
 					cell.appendChild(img);
 					break;
 				}
 				case 'cell-0-3': {
 					var img = document.createElement('img');
 					img.src = 'images/qween_black.png';
-					img.style.height = '40px';
+					img.style.height = '38px';
 					img.classList.add('qweenBlack');
-					img.classList.add('draggable');
+					
 					cell.appendChild(img);
 					break;
 				}
@@ -257,10 +258,13 @@ function startGame() {
  */
 function figureMove(className) {
 	var fig = document.getElementsByClassName(className)[0]; // Берем элемент по классу
+	var oldCell = fig.parentNode;
+	var gameTable = document.getElementsByClassName('game-table')[0];
 	// Подключаем перетаскивание
 	fig.onmousedown = function(e) {
 		fig.style.position = 'absolute'; // абсолютное позиционирование
 		moveAt(e);
+		
 		
 		fig.style.zIndex = 3; // с нажатием - расположение над всеми
 		
@@ -271,20 +275,62 @@ function figureMove(className) {
 		}
 		
 		document.onmousemove = function(e) {
-			moveAt(e);			
+			moveAt(e);				
 		}
 		
 		fig.onmouseup = function() {
-			document.onmousemove = null;
-			fig.onmouseup = null;
-			fig.style.zIndex = 2; // по окончании движения расположение под теми, что будут двигаться
+			finishDrag();			
 		}				
 	}
 	// Отключаем прилипание
 	fig.ondragstart = function() {
 		return false;
 	};
+	
+	function finishDrag() {
+		document.onmousemove = null;
+		fig.onmouseup = null;
+		fig.style.zIndex = 2; // по окончании движения расположение под теми, что будут двигаться
+		//var cells = document.getElementsByTagName('td');
+		for (var i = 0; i < FIELD_SIZE_Y; i++) {
+			for (var j = 0; j < FIELD_SIZE_X; j++) {
+				var className = 'cell-' + i + '-' + j;
+				var cell = document.getElementsByClassName(className)[0];
+				if (getCoords(fig).top > getCoords(cell).top - 20 && getCoords(fig).top < getCoords(cell).top + 20 && 
+					getCoords(fig).left > getCoords(cell).left - 20 && getCoords(fig).left < getCoords(cell).left + 20) {
+					var img = document.createElement('img'); // Создаем картинку
+					img.src = fig.src;       // Указываем путь
+					img.style.height = '38px';               // Высота
+					img.classList.add(fig.className);          // Класс - имя фигуры
+					cell.appendChild(img);
+					figureMove(fig.className);
+					fig.parentNode.removeChild(fig);
+				} else {
+					//var img = document.createElement('img'); // Создаем картинку
+					//img.src = fig.src;       // Указываем путь
+					//img.style.height = '38px';               // Высота
+					//img.classList.add(fig.className);          // Класс - имя фигуры
+					//figureMove(fig.className);
+					//fig.parentNode.removeChild(fig);
+					//oldCell.appendChild(img);
+				}
+			}
+		}
+	}
 }
+
+
+
+	
+function getCoords(elem) { // кроме IE8-
+  var box = elem.getBoundingClientRect();
+
+  return {
+    top: box.top + pageYOffset,
+    left: box.left + pageXOffset
+  };
+}	
+
 	
 /**
  * Функция завершения игры
