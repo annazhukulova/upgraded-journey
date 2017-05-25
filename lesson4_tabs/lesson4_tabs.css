@@ -1,0 +1,39 @@
+html, body {
+	background-color: #eee;
+}
+
+#container {
+	margin: 0 auto;
+	width: 1000px;
+}
+
+.tab, .text {
+	background-color: #fff;
+}
+
+.tab {
+	display: inline-block;
+	width: 130px;
+	height: 17px;
+	text-align: center;
+	padding: 10px;
+	background-color: #FFAA00;
+	border-radius: 7px 7px 0 0;
+}
+
+.tab a {
+	width: 130px;
+	height: 17px;
+	text-decoration: none;
+	color: #fff;	
+}
+
+.tab:hover {
+	background-color: #FFBF40;
+}
+
+.text {
+	border: 2px solid #FFAA00;
+	border-radius: 0 7px 7px 7px;
+	padding: 10px;
+}
